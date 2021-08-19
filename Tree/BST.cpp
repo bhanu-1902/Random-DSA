@@ -119,7 +119,7 @@ int main()
     root = InsertNode(root, 10);
     root = InsertNode(root, 20);
     root = InsertNode(root, 12);
-    root = InsertNode(root, 8);
+  //  root = InsertNode(root, 8);
     root = InsertNode(root, 17);
     root = InsertNode(root, 25);
     cout << Max(root) << endl;

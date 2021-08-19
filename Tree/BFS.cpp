@@ -69,18 +69,46 @@ void BFS(Node *root)
     }
 }
 
-// bool IsBST(Node *root){
+bool isBSTUtil(Node *root, int minVal, int maxVal)
+{
 
-//     if(root==NULL) return false;
+    if (root == NULL)
+        return true;
 
-//     else{
+    if (root->data > minVal && root->data < maxVal && isBSTUtil(root->left, minVal, root->data) && isBSTUtil(root->right, root->data, maxVal))
+        return true;
 
-//         if()
-//     }
-// }
+    else
+        return false;
+}
 
-Node *Delete(Node *root, int data){
-    
+bool IsBST(Node *root)
+{
+    return isBSTUtil(root, INT_MIN, INT_MAX);
+}
+
+Node *Min(Node *root)
+{
+
+    if (root == NULL)
+        return 0;
+
+    else
+    {
+
+        if (root->right == NULL)
+            return root;
+
+        else
+        {
+            return Min(root->right);
+        }
+    }
+
+    // while(root->left!=NULL){
+    //     root=root->left;
+    // }
+    // return root->data;
 }
 
 void PreOrder(Node *root)
@@ -122,19 +150,76 @@ void PostOrder(Node *root)
     }
 }
 
+Node *Delete(Node *root, int data)
+{
+    if (root == NULL)
+        return root;
+
+    else if (root->data > data)
+        root->left = Delete(root->left, data);
+
+    else if (root->data < data)
+        root->right = Delete(root->right, data);
+
+    else
+    {
+        //No child
+        if (root->left == NULL && root->right == NULL)
+        {
+            delete root;
+            root = NULL;
+        }
+
+        //One child
+        else if (root->left == NULL)
+        {
+            Node *temp = root;
+            root = root->right;
+            delete temp;
+        }
+
+        else if (root->right == NULL)
+        {
+            Node *temp = root;
+            root = root->left;
+            delete temp;
+        }
+
+        //2 children
+        else
+        {
+            Node *temp = Min(root->right);
+            root->data = temp->data;
+            root->right = Delete(root->right, temp->data);
+        }
+
+        return root;
+    }
+}
+
 int main()
 {
     Node *root = NULL;
-    root = InsertNode(root, 15);
-    root = InsertNode(root, 10);
-    root = InsertNode(root, 20);
     root = InsertNode(root, 12);
-    root = InsertNode(root, 8);
-    root = InsertNode(root, 17);
-    root = InsertNode(root, 25);
+    root = InsertNode(root, 5);
+    root = InsertNode(root, 15);
+    root = InsertNode(root, 3);
+    root = InsertNode(root, 7);
+    root = InsertNode(root, 1);
+    root = InsertNode(root, 9);
     root = InsertNode(root, 13);
-    root = InsertNode(root, 16);
+    root = InsertNode(root, 17);
 
+    // BFS(root);
+    // cout << endl;
+    // PreOrder(root);
+    // cout << endl;
+    // InOrder(root);
+    // cout << endl;
+    // PostOrder(root);
+    // cout << endl;
+
+    Delete(root, 15);
     BFS(root);
     cout << endl;
     PreOrder(root);
@@ -142,4 +227,8 @@ int main()
     InOrder(root);
     cout << endl;
     PostOrder(root);
+
+    cout << endl;
+
+    cout << IsBST(root);
 }
